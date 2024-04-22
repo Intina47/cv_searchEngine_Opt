@@ -8,3 +8,4 @@ https://excalidraw.com/#json=f18-qMmtQio89FTuqi0C5,LcUaiE-oXTs249TcEoyKaQ
 
 ## Iteration 2
 
+![image](https://github.com/Intina47/cv_searchEngine_Opt/assets/78519682/63ebf355-77a4-42dc-990c-0aeffb4462af)
