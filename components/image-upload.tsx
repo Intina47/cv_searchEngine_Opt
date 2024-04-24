@@ -24,7 +24,6 @@ function ImageUploadComponent() {
             return;
         }
         
-        // Assuming you have a backend endpoint to handle the image upload
         const formData = new FormData();
         formData.append('image', image);
 

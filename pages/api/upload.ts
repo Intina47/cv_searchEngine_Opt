@@ -5,11 +5,10 @@ import { processImage } from '../../utils/imageProcessor';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'POST') {
-        const { imgUr } = req.query;
-        if (!imgUr) {
-            console.error('No problem for now we are going to use the default image');
-        }
-        const imgUrl = 'https://t4.ftcdn.net/jpg/00/65/70/65/360_F_65706597_uNm2SwlPIuNUDuMwo6stBd81e25Y8K8s.jpg';
+        const { imgUrl } = req.body;
+
+        // const imgUrl = 'https://t4.ftcdn.net/jpg/00/65/70/65/360_F_65706597_uNm2SwlPIuNUDuMwo6stBd81e25Y8K8s.jpg'; this works okay
+        // const imgUrl = 'https://firebasestorage.googleapis.com/v0/b/real-one-ee089.appspot.com/o/images%2Fdua.jpg?alt=media&token=3e956f3e-0664-4d1f-ba8e-e42a4d6b3dbf';
         if (!imgUrl) {
             return res.status(400).json({ error: 'Image URL is required' });
         }
