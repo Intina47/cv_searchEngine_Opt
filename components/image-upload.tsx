@@ -42,6 +42,7 @@ function ImageUploadComponent() {
     const [imageUrl, setImageUrl] = useState<string | null>(null);
     const [image, setImage] = useState<File | null>(null);
     const [predictions, setPredictions] = useState<any[] | null>(null);
+    const [loading, setLoading] = useState(false);
 
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -62,6 +63,7 @@ const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         return;
     }
 
+    setLoading(true);
     // Removed the async function definition and directly called the uploadFiles function
     const downloadURLs = await uploadFiles([image], (progress) => {
         console.log(`Upload is ${progress}% done`);
@@ -83,15 +85,17 @@ const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
             throw new Error('Failed to upload image');
         }
         const data = await response.json();
+        setLoading(false);
         setPredictions(data.model_predictions);
     } catch (error) {
+        setLoading(false);
         console.error('Error uploading image:', error);
         alert('Error uploading image');
     }
 };
         return (
             <div className="max-w-md mx-auto my-10 p-5 border rounded-lg shadow-lg bg-white">
-                <h1 className="text-2xl font-bold text-center mb-6">Upload an Image</h1>
+                <h1 className="text-xl font-bold font-mono text-center mb-6">Upload An Image For Object Detection</h1>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                         <input
@@ -108,25 +112,28 @@ const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
                     </div>
                     <button
                         type="submit"
-                        className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                        className="w-full bg-blue-500 hover:bg-blue-700 text-white font-mono py-2 px-4 rounded"
+                        disabled={loading}
                     >
-                        Upload Image
+                        {loading ? 'Analyzing Image...' : 'Analyze Image'}
                     </button>
                 </form>
                 {/* display predictions */}
                 {predictions && (
-                    <div className="mt-6">
-                        <h2 className="text-lg font-semibold text-center mb-3">Predictions</h2>
-                        <ul>
-                            {predictions.map((prediction, index) => (
-                                <li key={index}>{prediction.class}</li>
-                            ))}
-                        </ul>
+                    <div className="mt-1 flex flex-wrap justify-center">
+                        <h2 className="text-l font-mono text-center mb-1 w-full">Analysis Results</h2>
+                        {predictions.map((prediction, index) => (
+                            <div key={index} className="bg-gray-100 font-mono rounded-full px-3 py-1 m-1">
+                                <span className="text-violet-500">{prediction.class}</span>
+                            </div>
+                        ))}
                     </div>
                 )}
+
+
                 {imageUrl && (
                     <div className="mt-6">
-                        <h2 className="text-lg font-semibold text-center mb-3">Image Preview</h2>
+                        <h2 className="text-lg font-mono text-center mb-3">Image Preview</h2>
                         <img src={imageUrl} alt="Preview" className="mx-auto" style={{ maxWidth: '100%', height: 'auto' }} />
                     </div>
                 )}
