@@ -41,6 +41,7 @@ function uploadFiles(
 function ImageUploadComponent() {
     const [imageUrl, setImageUrl] = useState<string | null>(null);
     const [image, setImage] = useState<File | null>(null);
+    const [predictions, setPredictions] = useState<any[] | null>(null);
 
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -82,8 +83,7 @@ const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
             throw new Error('Failed to upload image');
         }
         const data = await response.json();
-        console.log('Success:', data);
-        alert('Image uploaded successfully!');
+        setPredictions(data.model_predictions);
     } catch (error) {
         console.error('Error uploading image:', error);
         alert('Error uploading image');
@@ -113,6 +113,17 @@ const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
                         Upload Image
                     </button>
                 </form>
+                {/* display predictions */}
+                {predictions && (
+                    <div className="mt-6">
+                        <h2 className="text-lg font-semibold text-center mb-3">Predictions</h2>
+                        <ul>
+                            {predictions.map((prediction, index) => (
+                                <li key={index}>{prediction.class}</li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
                 {imageUrl && (
                     <div className="mt-6">
                         <h2 className="text-lg font-semibold text-center mb-3">Image Preview</h2>
