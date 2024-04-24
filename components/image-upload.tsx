@@ -1,5 +1,42 @@
 'use client';
 import React, { useState } from 'react';
+import {
+    getStorage,
+    ref,
+    uploadBytesResumable,
+    getDownloadURL
+   } from 'firebase/storage';
+import { app } from '../lib/firebaseClientConfig';
+const storage = getStorage(app);
+
+function uploadFiles(
+    files: File[], setUploadProgress: (progress: number) => void
+   ) {
+    const promises = files.map((file) => {
+     return new Promise<string>((resolve, reject) => {
+      const fileRef = ref(storage, `images/${file.name}`);
+      const uploadTask = uploadBytesResumable(fileRef, file);
+   
+      uploadTask.on(
+       'state_changed',
+       (snapshot) => {
+        // Calculate the progress percentage
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        setUploadProgress(progress);
+       },
+       (error) => {
+        reject(error);
+       },
+       async () => {
+        const url = await getDownloadURL(uploadTask.snapshot.ref);
+        resolve(url);
+       }
+      );
+     });
+    });
+   
+    return Promise.all(promises);
+   }
 
 function ImageUploadComponent() {
     const [imageUrl, setImageUrl] = useState<string | null>(null);
@@ -17,30 +54,41 @@ function ImageUploadComponent() {
         }
     };
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        if (!image) {
-            alert('Please select an image first.');
-            return;
-        }
-        
-        const formData = new FormData();
-        formData.append('image', image);
+const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!image) {
+        alert('Please select an image first.');
+        return;
+    }
 
-        fetch('/api/upload', {
+    // Removed the async function definition and directly called the uploadFiles function
+    const downloadURLs = await uploadFiles([image], (progress) => {
+        console.log(`Upload is ${progress}% done`);
+    });
+
+    // uploadFiles returns an array of download URLs. If you're only uploading one file, you can just take the first element.
+    const downloadURL = downloadURLs[0];
+
+    // Send the downloadURL to the server
+    try {
+        const response = await fetch('/api/upload', {
             method: 'POST',
-            body: formData,
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Success:', data);
-            alert('Image uploaded successfully!');
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-            alert('Error uploading image');
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ imgUrl: downloadURL }),
         });
-    };
+        if (!response.ok) {
+            throw new Error('Failed to upload image');
+        }
+        const data = await response.json();
+        console.log('Success:', data);
+        alert('Image uploaded successfully!');
+    } catch (error) {
+        console.error('Error uploading image:', error);
+        alert('Error uploading image');
+    }
+};
         return (
             <div className="max-w-md mx-auto my-10 p-5 border rounded-lg shadow-lg bg-white">
                 <h1 className="text-2xl font-bold text-center mb-6">Upload an Image</h1>
