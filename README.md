@@ -10,5 +10,6 @@ https://excalidraw.com/#json=f18-qMmtQio89FTuqi0C5,LcUaiE-oXTs249TcEoyKaQ
 
 ![image](https://github.com/Intina47/cv_searchEngine_Opt/assets/78519682/63ebf355-77a4-42dc-990c-0aeffb4462af)
 
-## test
-![image](https://www.figma.com/file/RFZmDp02vMlvxTzEfLGVej/Untitled?type=whiteboard&node-id=1-401&t=XskpTYnYJ4FYxvAD-4)
+## Current State / Preview
+
+<img width="366" alt="Capture" src="https://github.com/Intina47/cv_searchengine_opt/assets/78519682/96e6060b-95a9-4002-a359-18acb8ca7ecb">
