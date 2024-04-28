@@ -1,3 +1,4 @@
+// path: /api/upload
 import { NextApiRequest, NextApiResponse } from 'next';
 import axios from 'axios';
 import { processImage } from '../../utils/imageProcessor';
