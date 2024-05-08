@@ -13,4 +13,5 @@ https://excalidraw.com/#json=f18-qMmtQio89FTuqi0C5,LcUaiE-oXTs249TcEoyKaQ
 ![image](https://excalidraw.com/#json=TdqHwC0MvkXczvDE1arek,HGYK93fLAMVYOnMnpV1rQA)
 
 ## test
-![image](https://www.figma.com/file/RFZmDp02vMlvxTzEfLGVej/Untitled?type=whiteboard&node-id=1-401&t=XskpTYnYJ4FYxvAD-4)
+![image](https://github.com/Intina47/cv_searchengine_opt/assets/78519682/f7ef9855-e304-446b-a508-d11820412074)
+
