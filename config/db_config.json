@@ -1,0 +1,5 @@
+{
+    "mongo_uri": {
+        "default": "mongodb://localhost:27017/express-mvc"
+    }
+}
